@@ -33,7 +33,7 @@ usage:
 Commands that scan also accept:
   -cache-directory-ttl D   reuse a curated directory answer for D (0 disables)
   -cache-blocklist-ttl D   reuse a blocklist answer for D (0 disables)
-  -no-cache                re-fetch curated sources on every scan
+  -no-cache                re-fetch curated sources and asset lists on every scan
 
 Commands that consume SEP-0042 asset lists (scan, attestation, history, serve)
 also accept:

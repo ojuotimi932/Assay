@@ -343,13 +343,20 @@ func cacheFlags(fs *flag.FlagSet) func() scan.Options {
 		"reuse a curated directory answer for this long (0 disables)")
 	blocklistTTL := fs.Duration("cache-blocklist-ttl", defaults.ReputationBlocklistTTL,
 		"reuse a blocklist answer for this long (0 disables)")
-	noCache := fs.Bool("no-cache", false, "re-fetch curated sources on every scan")
+	noCache := fs.Bool("no-cache", false, "re-fetch curated sources and asset lists on every scan")
 	return func() scan.Options {
-		return scan.Options{
+		opts := scan.Options{
 			ReputationDirectoryTTL: *directoryTTL,
 			ReputationBlocklistTTL: *blocklistTTL,
 			NoReputationCache:      *noCache,
+			AssetListTTL:           defaults.AssetListTTL,
 		}
+		// -no-cache means every consumed signal is re-read, not only the
+		// reputation endpoints; a cached asset list would contradict its help.
+		if *noCache {
+			opts.AssetListTTL = 0
+		}
+		return opts
 	}
 }
 
