@@ -71,13 +71,13 @@ func ParseHolder(id string) (base string, muxedID uint64, muxed bool, err error)
 	switch len(id) {
 	case accountIDStrkeyLen:
 		if _, err := decodeHolderStrkey(strkeyVersionAccount, id); err != nil {
-			return "", 0, false, fmt.Errorf("%w: %q: %v", ErrBadHolder, id, err)
+			return "", 0, false, fmt.Errorf("%w: %q: %w", ErrBadHolder, id, err)
 		}
 		return id, 0, false, nil
 	case muxedStrkeyLen:
 		payload, err := decodeHolderStrkey(strkeyVersionMuxed, id)
 		if err != nil {
-			return "", 0, false, fmt.Errorf("%w: %q: %v", ErrBadHolder, id, err)
+			return "", 0, false, fmt.Errorf("%w: %q: %w", ErrBadHolder, id, err)
 		}
 		if len(payload) != muxedPayloadLen {
 			return "", 0, false, fmt.Errorf(

@@ -250,7 +250,14 @@ func cloneList(l *List) *List {
 		return nil
 	}
 	clone := *l
-	clone.Assets = append([]Asset(nil), l.Assets...)
+	// Preserve the decoder's distinction between a missing/null assets key
+	// (nil) and an explicitly empty array (non-nil, length 0): the fuzz harness
+	// compares the client's re-encoding against a generic decode of the body,
+	// and collapsing the two would make a whole-list decode look partial.
+	if l.Assets != nil {
+		clone.Assets = make([]Asset, len(l.Assets))
+		copy(clone.Assets, l.Assets)
+	}
 	return &clone
 }
 
